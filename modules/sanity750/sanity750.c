@@ -44,8 +44,10 @@ static void sanity_print_status(const char *title)
     console_hide();
 }
 
-static void sanity_run_task(void)
+static void sanity_run_task(void *unused)
 {
+    (void)unused;
+
     /* short delay to allow menu close / UI settle */
     msleep(200);
 
@@ -55,14 +57,18 @@ static void sanity_run_task(void)
     sanity_print_status("750D SANITY CHECK");
 }
 
-static void sanity_show_last_task(void)
+static void sanity_show_last_task(void *unused)
 {
+    (void)unused;
+
     msleep(100);
     sanity_print_status("750D SANITY LAST RESULT");
 }
 
-static void sanity_reset_task(void)
+static void sanity_reset_task(void *unused)
 {
+    (void)unused;
+
     msleep(100);
 
     sanity_run_count = 0;
@@ -73,16 +79,22 @@ static void sanity_reset_task(void)
 
 static void sanity_menu_run(void *priv, int delta)
 {
+    (void)priv;
+    (void)delta;
     run_in_separate_task(sanity_run_task, NULL);
 }
 
 static void sanity_menu_show_last(void *priv, int delta)
 {
+    (void)priv;
+    (void)delta;
     run_in_separate_task(sanity_show_last_task, NULL);
 }
 
 static void sanity_menu_reset(void *priv, int delta)
 {
+    (void)priv;
+    (void)delta;
     run_in_separate_task(sanity_reset_task, NULL);
 }
 

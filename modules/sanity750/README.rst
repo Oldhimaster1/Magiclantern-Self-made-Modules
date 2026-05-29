@@ -12,15 +12,23 @@ active Magic Lantern development tree before building.
 
 Recommended upstream base
 -------------------------
-Use the current Git-based Magic Lantern development tree:
+Use the current Git-based Magic Lantern development tree::
 
-- ``reticulatedpines/magiclantern_simplified``
+    reticulatedpines/magiclantern_simplified
 
-Expected placement
-------------------
-Place this folder inside the upstream ML tree as:
+Expected repository layout
+--------------------------
+This overlay repository mirrors a fragment of the upstream ML tree::
 
-::
+    modules/
+      sanity750/
+        README.rst
+        sanity750.c
+        Makefile
+
+Expected placement inside upstream ML tree
+------------------------------------------
+Place this folder inside the upstream ML tree as::
 
     modules/sanity750/
 
@@ -52,25 +60,38 @@ property writes.
 Build
 -----
 From inside a full Magic Lantern source tree, use the normal module build flow.
-For example:
-
-::
+For example::
 
     cd modules/sanity750
     make
 
-Or build from the ML root/module build workflow used by your chosen tree.
+Or build from the ML root / module build workflow used by your chosen tree.
+
+Expected output
+---------------
+The module name is ``san750``, so the built module artifact is expected to be::
+
+    san750.mo
 
 Deploy
 ------
-Copy the resulting ``.mo`` file to:
-
-::
+Copy the resulting ``san750.mo`` file to::
 
     ML/MODULES/
 
 Enable the module from the Magic Lantern Modules menu, then restart the camera
 so the module loads.
+
+Suggested first test procedure
+------------------------------
+1. Confirm your camera is on a known-good firmware baseline for your ML tree.
+2. Build the module inside the full upstream ML source tree.
+3. Copy ``san750.mo`` to ``ML/MODULES/`` on the card.
+4. Enable the module from the Magic Lantern Modules menu.
+5. Restart the camera so the module loads.
+6. Open the ML Debug menu and run ``Run 750D sanity check``.
+7. Verify that the console displays the status screen and that the run counter
+   persists across reloads.
 
 Target
 ------
@@ -79,6 +100,10 @@ Use a known-good firmware baseline and test conservatively.
 
 Notes
 -----
-The included GitHub Actions workflow validates repository structure and archives
-module sources, but does not perform a real Magic Lantern compile by itself.
-A real compile requires the full upstream ML source tree.
+- The included GitHub Actions workflow validates repository structure and
+  archives module sources, but does not perform a real Magic Lantern compile
+  by itself.
+- A real compile requires the full upstream ML source tree.
+- If your chosen upstream ML tree does not export the symbol
+  ``get_halfshutter_pressed()``, replace that call with the exact equivalent
+  used by a currently working module in the same tree.

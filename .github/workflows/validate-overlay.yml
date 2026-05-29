@@ -1,0 +1,40 @@
+name: validate-overlay
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show repository structure
+        run: |
+          pwd
+          ls -la
+          find . -maxdepth 4 -type f | sort
+
+      - name: Validate overlay module files exist
+        run: |
+          test -f modules/sanity750/Makefile
+          test -f modules/sanity750/sanity750.c
+          test -f modules/sanity750/README.rst
+
+      - name: Explain build limitation
+        run: |
+          echo "This repository currently contains only the custom module overlay files."
+          echo "The Magic Lantern top-level build system is not present in this repo,"
+          echo "so a real module compilation cannot run here unless this repo is placed"
+          echo "inside a full Magic Lantern source tree."
+          echo ""
+          echo "Overlay validation completed successfully."
+
+      - name: Upload module source as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sanity750-source
+          path: modules/sanity750/
